@@ -1,10 +1,13 @@
 import ccxt, yfinance
 import pandas_ta as ta
 import pandas as pd
-import streamlit as st
+# import config
 import requests
 from dotenv import load_dotenv
 import os
+
+load_dotenv()
+
 
 load_dotenv()
 
@@ -19,19 +22,16 @@ exchange = exchange_class({
     "apiKey": BINANCE_API_KEY,
     "secret": BINANCE_SECRET_KEY
 })
-
-webhook = os.getenv('DISCORD_WEBHOOK')
-
-
-bars = exchange.fetch_ohlcv('ETH/USDT', timeframe='5m', limit=500)
+print(exchange)
 
 
-df = pd.DataFrame(bars, columns=['time', 'open', 'high', 'low', 'close', 'volume'])
-adx = df.ta.adx()
-macd = df.ta.macd()
-rsi = df.ta.rsi()
 
-df = pd.concat([df, adx, macd, rsi], axis=1)
 
-st.dataframe(df)
-print(df)
+# # Get all candle patterns (This is the default behaviour)
+# df = df.ta.cdl_pattern(name="all")
+
+# # Get only one pattern
+# df = df.ta.cdl_pattern(name="doji")
+
+# # Get some patterns
+# df = df.ta.cdl_pattern(name=["doji", "inside"])
