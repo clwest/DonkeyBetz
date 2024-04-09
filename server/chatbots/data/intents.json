@@ -1,0 +1,57 @@
+{
+  "greetings": [
+    "Hi",
+    "Hello",
+    "Hey there",
+    "What's up",
+    "How's it going"
+  ],
+  "farewell": [
+    "Goodbye",
+    "See you",
+    "Bye",
+    "Talk to you later",
+    "Have a good one",
+    "See you on [date]"
+  ],
+  "help": [
+    "Can you help me?",
+    "I don't understand [topic], can you explain?",
+    "I need assistance.",
+    "What can you do?"
+  ],
+  "book_flight": [
+    "I need a flight",
+    "Book a flight to [destination]",
+    "Can I get a flight to [destination] on [date]?",
+    "Find flights from [city] to [destination]",
+    "Compare flights"
+  ],
+  "cancel_reservation": [
+    "Cancel my booking",
+    "I need to cancel my reservation",
+    "How do I cancel my flight?",
+    "Can you reschedule my reservation?"
+  ],
+  "get_weather": [
+    "What's the weather in [city]?",
+    "Tell me the weather forecast for [city]",
+    "Is it going to rain in [city] today?",
+    "When will it snow in [city]"
+  ],
+  "ask_for_recommendations": [
+    "Suggest some places in [destination]",
+    "What are the best spots rated by locals in [destination]",
+    "Recommend some restaurants in [destination] that server [dishes]",
+    "Recommend some outdoor activities to do with a [age] child"
+  ],
+  "check_a_stock": [
+    "What's happening with [stock] today?",
+    "Show me the current price of [stock]",
+    "How is [stock] performing today?",
+    "Should I buy [stock] for my portfolio?",
+    "Should I sell [stock]?",
+    "What was the last earnings on [stock]",
+    "When is the next earnings call on [stock]"
+  ]
+}
