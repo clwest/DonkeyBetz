@@ -1,13 +1,20 @@
-2024-04-09 15:22:43,340 INFO: Processed URL 'Introduction | 🦜️🔗 LangChain' with content length: 22 characters [in process_urls.py:94]
-2024-04-09 15:22:43,358 INFO: Processed URL 'Introduction | 🦜️🔗 LangChain' with content length: 938 characters [in process_urls.py:94]
-2024-04-09 15:22:43,375 INFO: Processed URL 'Introduction | 🦜️🔗 LangChain' with content length: 913 characters [in process_urls.py:94]
-2024-04-09 15:22:43,389 INFO: Processed URL 'Introduction | 🦜️🔗 LangChain' with content length: 738 characters [in process_urls.py:94]
-2024-04-09 15:22:43,409 INFO: Processed URL 'Introduction | 🦜️🔗 LangChain' with content length: 913 characters [in process_urls.py:94]
-2024-04-09 15:22:43,426 INFO: Processed URL 'Introduction | 🦜️🔗 LangChain' with content length: 928 characters [in process_urls.py:94]
-2024-04-09 15:22:43,432 INFO: Processed URL 'Introduction | 🦜️🔗 LangChain' with content length: 394 characters [in process_urls.py:94]
-2024-04-09 15:22:43,518 DEBUG: Combined data: [<content_loaders.process_urls.Document object at 0x1aab7d590>, <content_loaders.process_urls.Document object at 0x1abdd7990>, <content_loaders.process_urls.Document object at 0x1abd50350>, <content_loaders.process_urls.Document object at 0x1abe9f510>, <content_loaders.process_urls.Document object at 0x1abe9cc50>] [in generate_embeddings.py:19]
-2024-04-09 15:22:43,562 DEBUG: Embedding generation completed [in generate_embeddings.py:25]
-2024-04-09 15:22:43,562 INFO: Generated 7 embeddings to insert into PGVector: AI Frameworks [in generate_embeddings.py:26]
-2024-04-09 15:22:44,144 INFO: Embeddings added to the database [in generate_embeddings.py:31]
-2024-04-09 15:22:44,144 INFO: Generated embeddings for (7, <langchain_community.vectorstores.pgvector.PGVector object at 0x1abd36bd0>) items of type url [in process_data.py:96]
-2024-04-09 15:22:44,197 INFO: New project added to database with title: Langchain Docs [in process_data.py:108]
+2024-04-12 10:21:24,671 DEBUG: Combined data: [] [in generate_embeddings.py:19]
+2024-04-12 10:21:24,758 DEBUG: Embedding generation completed [in generate_embeddings.py:25]
+2024-04-12 10:21:24,758 INFO: Generated 0 embeddings to insert into PGVector: Casino [in generate_embeddings.py:26]
+2024-04-12 10:21:24,760 INFO: Embeddings added to the database [in generate_embeddings.py:31]
+2024-04-12 10:21:24,760 INFO: Generated embeddings for (0, <langchain_community.vectorstores.pgvector.PGVector object at 0x1af5c1050>) items of type url [in process_data.py:96]
+2024-04-12 10:21:24,763 ERROR: Exception on /api/process-data/url [POST] [in app.py:828]
+Traceback (most recent call last):
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 873, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 892, in finalize_request
+    response = self.make_response(rv)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 1164, in make_response
+    raise TypeError(
+TypeError: The view function for '/process-data.process_url' did not return a valid response. The function either returned None or ended without a return statement.
+2024-04-12 13:31:03,786 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]

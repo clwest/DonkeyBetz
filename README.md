@@ -1,0 +1,1 @@
+reset zshell exec zsh
