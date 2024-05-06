@@ -18,3 +18,95 @@ Traceback (most recent call last):
     raise TypeError(
 TypeError: The view function for '/process-data.process_url' did not return a valid response. The function either returned None or ended without a return statement.
 2024-04-12 13:31:03,786 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-04-24 09:44:21,732 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-04-24 09:45:42,207 ERROR: Exception on /api/users/login [POST] [in app.py:828]
+Traceback (most recent call last):
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 264, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/retry.py", line 46, in call_with_retry
+    return do()
+           ^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 265, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 627, in _connect
+    raise err
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 615, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 868, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 1243, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask_limiter/extension.py", line 1168, in _check_request_limit
+    raise e
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask_limiter/extension.py", line 1149, in _check_request_limit
+    self.__evaluate_limits(endpoint, all_limits)
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask_limiter/extension.py", line 1086, in __evaluate_limits
+    if not method(lim.limit, *args, **kwargs):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/limits/strategies.py", line 138, in hit
+    self.storage.incr(
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/limits/storage/redis.py", line 198, in incr
+    return int(self.lua_incr_expire([key], [expiry, amount]))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/commands/core.py", line 5931, in __call__
+    return client.evalsha(self.sha, len(keys), *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/commands/core.py", line 5307, in evalsha
+    return self._evalsha("EVALSHA", sha, numkeys, *keys_and_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/commands/core.py", line 5291, in _evalsha
+    return self.execute_command(command, sha, numkeys, *keys_and_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 1086, in get_connection
+    connection.connect()
+  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 270, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 61 connecting to localhost:6379. Connection refused.
+2024-04-24 09:46:40,247 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-04-24 09:46:51,757 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
+2024-04-24 09:46:51,758 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
+2024-04-24 09:46:51,797 INFO: User found: bob [in users.py:101]
+2024-04-24 09:46:51,798 INFO: Attempting to validate password for user: bob [in users.py:108]
+2024-04-24 09:46:51,883 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
+2024-04-24 09:46:51,884 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
+2024-04-28 11:07:42,666 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-04-28 11:12:36,084 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-04-28 11:13:11,070 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-04-28 11:13:32,122 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-04-28 11:13:57,321 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-04-28 11:15:17,353 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
+2024-04-28 11:15:17,354 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
+2024-04-28 11:15:17,396 INFO: User found: bob [in users.py:101]
+2024-04-28 11:15:17,396 INFO: Attempting to validate password for user: bob [in users.py:108]
+2024-04-28 11:15:17,475 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
+2024-04-28 11:15:17,476 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
+2024-04-29 08:42:05,737 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-05-01 11:34:21,300 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-05-06 11:18:02,333 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-05-06 11:18:17,987 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
+2024-05-06 11:18:17,987 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
+2024-05-06 11:18:18,034 INFO: User found: bob [in users.py:101]
+2024-05-06 11:18:18,034 INFO: Attempting to validate password for user: bob [in users.py:108]
+2024-05-06 11:18:18,115 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
+2024-05-06 11:18:18,116 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
