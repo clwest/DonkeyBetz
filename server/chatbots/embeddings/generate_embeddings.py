@@ -13,7 +13,7 @@ CONNECTION_STRING = os.getenv("DEV_DATABASE_URL")
 def generate_embeddings(embed_data, OPENAI_API_KEY, connection_string, collection_name):
     try:
         embeddings = OpenAIEmbeddings(
-            model="text-embedding-ada-002", openai_api_key=OPENAI_API_KEY
+            model="text-embedding-3-small", openai_api_key=OPENAI_API_KEY
         )
 
         logger.debug(f"Combined data: {embed_data[:5]}")

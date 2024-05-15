@@ -17,7 +17,7 @@ class ChatRetrievalLLM:
         load_dotenv()
         self.openai_api = os.getenv("OPENAI_API_KEY")
         self.embeddings = OpenAIEmbeddings(
-            model="text-embedding-ada-002", openai_api_key=self.openai_api
+            model="text-embedding-3-small", openai_api_key=self.openai_api
         )
 
         self.llm = ChatOpenAI(

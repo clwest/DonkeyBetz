@@ -1,16 +1,17 @@
 """Initial migration.
 
-Revision ID: e14e044b2fab
+Revision ID: 63a5eb0a9830
 Revises: 
-Create Date: 2024-04-08 10:50:07.510602
+Create Date: 2024-05-15 12:16:03.760384
 
 """
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
+import pgvector
 
 # revision identifiers, used by Alembic.
-revision = 'e14e044b2fab'
+revision = '63a5eb0a9830'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -140,6 +141,14 @@ def upgrade():
         batch_op.create_index(batch_op.f('ix_crews_name'), ['name'], unique=False)
         batch_op.create_index(batch_op.f('ix_crews_user_id'), ['user_id'], unique=False)
 
+    op.create_table('langchain_pg_collection',
+    sa.Column('uuid', sa.UUID(), nullable=False),
+    sa.Column('name', sa.String(), nullable=True),
+    sa.Column('cmetadata', sa.JSON(), nullable=True),
+    sa.Column('project_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
+    sa.PrimaryKeyConstraint('uuid')
+    )
     op.create_table('posts',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=100), nullable=False),
@@ -260,6 +269,16 @@ def upgrade():
         batch_op.create_index(batch_op.f('ix_conversation_session_topic_name'), ['topic_name'], unique=False)
         batch_op.create_index(batch_op.f('ix_conversation_session_user_id'), ['user_id'], unique=False)
 
+    op.create_table('langchain_pg_embedding',
+    sa.Column('uuid', sa.UUID(), nullable=False),
+    sa.Column('collection_id', sa.UUID(), nullable=False),
+    sa.Column('embedding', pgvector.sqlalchemy.Vector(dim=1536), nullable=True),
+    sa.Column('document', sa.String(), nullable=True),
+    sa.Column('cmetadata', sa.JSON(), nullable=True),
+    sa.Column('custom_id', sa.String(), nullable=True),
+    sa.ForeignKeyConstraint(['collection_id'], ['langchain_pg_collection.uuid'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('uuid')
+    )
     op.create_table('post_categories_table',
     sa.Column('post_id', sa.Integer(), nullable=False),
     sa.Column('category_id', sa.Integer(), nullable=False),
@@ -367,6 +386,7 @@ def downgrade():
     op.drop_table('tasks')
     op.drop_table('post_tags_table')
     op.drop_table('post_categories_table')
+    op.drop_table('langchain_pg_embedding')
     with op.batch_alter_table('conversation_session', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_conversation_session_user_id'))
         batch_op.drop_index(batch_op.f('ix_conversation_session_topic_name'))
@@ -406,6 +426,7 @@ def downgrade():
         batch_op.drop_index('idx_post_title_user')
 
     op.drop_table('posts')
+    op.drop_table('langchain_pg_collection')
     with op.batch_alter_table('crews', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_crews_user_id'))
         batch_op.drop_index(batch_op.f('ix_crews_name'))

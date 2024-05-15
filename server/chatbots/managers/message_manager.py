@@ -1,7 +1,7 @@
 import os
 import uuid
 from factory import db 
-from models.chatbots import ChatMessage
+from models.chatbots import ChatMessage, ConversationSession
 import helpers.helper_functions as hf
 import helpers.custom_exceptions as ce
 from services.logging_config import root_logger as logger

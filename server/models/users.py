@@ -162,7 +162,7 @@ class EmbeddingStore(db.Model):
 
     uuid = db.Column(db.UUID(as_uuid=True), primary_key=True)
     collection_id = db.Column(db.UUID(as_uuid=True), db.ForeignKey('langchain_pg_collection.uuid', ondelete='CASCADE'), nullable=False)
-    embedding = db.Column(Vector(512)) 
+    embedding = db.Column(Vector(1536)) 
     document = db.Column(String)
     cmetadata = db.Column(JSON)
     custom_id = db.Column(String)

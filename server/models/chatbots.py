@@ -88,7 +88,10 @@ class ChatMessage(db.Model):
     session_id = db.Column(String(36), ForeignKey("conversation_session.id"), nullable=False, index=True)
     sender_id = db.Column(Text, index=True) # E.g., 'user id', 'bot', 'agent'
     message_type = db.Column(Text)  # E.g., 'user', 'bot', 'agent'
-    content = db.Column(Text, nullable=False)
+    content = db.Column(Text, nullable=False) # Text message content
+    audio_url = db.Column(String, nullable=True) # URL or Path to audio file
+    image_url = db.Column(String, nullable=True) # URL or Path to image file
+    prompt = db.Column(Text, nullable=True) # Prompt that generated a image
     created_at = db.Column(DateTime(timezone=True), default=func.now())
     updated_at = db.Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
 

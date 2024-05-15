@@ -76,7 +76,7 @@ class ChatbotManager:
             The created chatbot.
         """
         try:
-            new_chatbot = Chatbot(name=name, description=description, **kwargs)
+            new_chatbot = ChatbotModel(name=name, description=description, **kwargs)
             hf.add_to_db(new_chatbot)
             return new_chatbot
         except Exception as e:
@@ -97,7 +97,7 @@ class ChatbotManager:
             ce.ResourceNotFoundError: If the chatbot is not found.
         """
         try:
-            chatbot = hf.get_db_object(Chatbot, **kwargs)
+            chatbot = hf.get_db_object(ChatbotModel, **kwargs)
             if not chatbot:
                 raise ce.ResourceNotFoundError("Chatbot not found")
             return chatbot

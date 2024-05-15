@@ -1,112 +1,95 @@
-2024-04-12 10:21:24,671 DEBUG: Combined data: [] [in generate_embeddings.py:19]
-2024-04-12 10:21:24,758 DEBUG: Embedding generation completed [in generate_embeddings.py:25]
-2024-04-12 10:21:24,758 INFO: Generated 0 embeddings to insert into PGVector: Casino [in generate_embeddings.py:26]
-2024-04-12 10:21:24,760 INFO: Embeddings added to the database [in generate_embeddings.py:31]
-2024-04-12 10:21:24,760 INFO: Generated embeddings for (0, <langchain_community.vectorstores.pgvector.PGVector object at 0x1af5c1050>) items of type url [in process_data.py:96]
-2024-04-12 10:21:24,763 ERROR: Exception on /api/process-data/url [POST] [in app.py:828]
-Traceback (most recent call last):
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 873, in full_dispatch_request
-    return self.finalize_request(rv)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 892, in finalize_request
-    response = self.make_response(rv)
-               ^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 1164, in make_response
-    raise TypeError(
-TypeError: The view function for '/process-data.process_url' did not return a valid response. The function either returned None or ended without a return statement.
-2024-04-12 13:31:03,786 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-04-24 09:44:21,732 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-04-24 09:45:42,207 ERROR: Exception on /api/users/login [POST] [in app.py:828]
-Traceback (most recent call last):
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 264, in connect
-    sock = self.retry.call_with_retry(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/retry.py", line 46, in call_with_retry
-    return do()
-           ^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 265, in <lambda>
-    lambda: self._connect(), lambda error: self.disconnect(error)
-            ^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 627, in _connect
-    raise err
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 615, in _connect
-    sock.connect(socket_address)
-ConnectionRefusedError: [Errno 61] Connection refused
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-                                                ^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 868, in full_dispatch_request
-    rv = self.preprocess_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask/app.py", line 1243, in preprocess_request
-    rv = self.ensure_sync(before_func)()
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask_limiter/extension.py", line 1168, in _check_request_limit
-    raise e
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask_limiter/extension.py", line 1149, in _check_request_limit
-    self.__evaluate_limits(endpoint, all_limits)
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/flask_limiter/extension.py", line 1086, in __evaluate_limits
-    if not method(lim.limit, *args, **kwargs):
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/limits/strategies.py", line 138, in hit
-    self.storage.incr(
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/limits/storage/redis.py", line 198, in incr
-    return int(self.lua_incr_expire([key], [expiry, amount]))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/commands/core.py", line 5931, in __call__
-    return client.evalsha(self.sha, len(keys), *args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/commands/core.py", line 5307, in evalsha
-    return self._evalsha("EVALSHA", sha, numkeys, *keys_and_args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/commands/core.py", line 5291, in _evalsha
-    return self.execute_command(command, sha, numkeys, *keys_and_args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 1086, in get_connection
-    connection.connect()
-  File "/Users/chriswest/Desktop/new_project/.venv/lib/python3.11/site-packages/redis/connection.py", line 270, in connect
-    raise ConnectionError(self._error_message(e))
-redis.exceptions.ConnectionError: Error 61 connecting to localhost:6379. Connection refused.
-2024-04-24 09:46:40,247 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-04-24 09:46:51,757 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
-2024-04-24 09:46:51,758 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
-2024-04-24 09:46:51,797 INFO: User found: bob [in users.py:101]
-2024-04-24 09:46:51,798 INFO: Attempting to validate password for user: bob [in users.py:108]
-2024-04-24 09:46:51,883 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
-2024-04-24 09:46:51,884 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
-2024-04-28 11:07:42,666 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-04-28 11:12:36,084 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-04-28 11:13:11,070 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-04-28 11:13:32,122 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-04-28 11:13:57,321 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-04-28 11:15:17,353 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
-2024-04-28 11:15:17,354 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
-2024-04-28 11:15:17,396 INFO: User found: bob [in users.py:101]
-2024-04-28 11:15:17,396 INFO: Attempting to validate password for user: bob [in users.py:108]
-2024-04-28 11:15:17,475 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
-2024-04-28 11:15:17,476 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
-2024-04-29 08:42:05,737 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-01 11:34:21,300 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-06 11:18:02,333 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-06 11:18:17,987 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
-2024-05-06 11:18:17,987 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
-2024-05-06 11:18:18,034 INFO: User found: bob [in users.py:101]
-2024-05-06 11:18:18,034 INFO: Attempting to validate password for user: bob [in users.py:108]
-2024-05-06 11:18:18,115 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
-2024-05-06 11:18:18,116 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
+2024-05-15 12:19:26,464 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 52 characters [in process_urls.py:94]
+2024-05-15 12:19:26,479 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 980 characters [in process_urls.py:94]
+2024-05-15 12:19:26,491 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 983 characters [in process_urls.py:94]
+2024-05-15 12:19:26,506 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 961 characters [in process_urls.py:94]
+2024-05-15 12:19:26,516 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 971 characters [in process_urls.py:94]
+2024-05-15 12:19:26,527 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 974 characters [in process_urls.py:94]
+2024-05-15 12:19:26,538 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 968 characters [in process_urls.py:94]
+2024-05-15 12:19:26,549 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 975 characters [in process_urls.py:94]
+2024-05-15 12:19:26,561 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 963 characters [in process_urls.py:94]
+2024-05-15 12:19:26,572 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 964 characters [in process_urls.py:94]
+2024-05-15 12:19:26,585 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 962 characters [in process_urls.py:94]
+2024-05-15 12:19:26,597 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 967 characters [in process_urls.py:94]
+2024-05-15 12:19:26,604 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 513 characters [in process_urls.py:94]
+2024-05-15 12:19:26,616 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 795 characters [in process_urls.py:94]
+2024-05-15 12:19:26,619 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 95 characters [in process_urls.py:94]
+2024-05-15 12:19:26,636 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 872 characters [in process_urls.py:94]
+2024-05-15 12:19:26,648 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 628 characters [in process_urls.py:94]
+2024-05-15 12:19:26,657 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 390 characters [in process_urls.py:94]
+2024-05-15 12:19:26,662 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 214 characters [in process_urls.py:94]
+2024-05-15 12:19:26,671 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 507 characters [in process_urls.py:94]
+2024-05-15 12:19:26,677 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 208 characters [in process_urls.py:94]
+2024-05-15 12:19:26,688 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 593 characters [in process_urls.py:94]
+2024-05-15 12:19:26,694 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 267 characters [in process_urls.py:94]
+2024-05-15 12:19:26,702 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 490 characters [in process_urls.py:94]
+2024-05-15 12:19:26,713 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 508 characters [in process_urls.py:94]
+2024-05-15 12:19:26,726 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 631 characters [in process_urls.py:94]
+2024-05-15 12:19:26,734 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 417 characters [in process_urls.py:94]
+2024-05-15 12:19:26,737 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 129 characters [in process_urls.py:94]
+2024-05-15 12:19:26,748 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 958 characters [in process_urls.py:94]
+2024-05-15 12:19:26,758 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 980 characters [in process_urls.py:94]
+2024-05-15 12:19:26,763 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 383 characters [in process_urls.py:94]
+2024-05-15 12:19:26,777 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 700 characters [in process_urls.py:94]
+2024-05-15 12:19:26,791 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 714 characters [in process_urls.py:94]
+2024-05-15 12:19:26,794 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 95 characters [in process_urls.py:94]
+2024-05-15 12:19:26,796 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 52 characters [in process_urls.py:94]
+2024-05-15 12:19:26,805 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 980 characters [in process_urls.py:94]
+2024-05-15 12:19:26,812 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 983 characters [in process_urls.py:94]
+2024-05-15 12:19:26,822 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 961 characters [in process_urls.py:94]
+2024-05-15 12:19:26,831 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 971 characters [in process_urls.py:94]
+2024-05-15 12:19:26,840 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 974 characters [in process_urls.py:94]
+2024-05-15 12:19:26,848 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 968 characters [in process_urls.py:94]
+2024-05-15 12:19:26,857 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 975 characters [in process_urls.py:94]
+2024-05-15 12:19:26,865 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 963 characters [in process_urls.py:94]
+2024-05-15 12:19:26,874 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 964 characters [in process_urls.py:94]
+2024-05-15 12:19:26,885 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 962 characters [in process_urls.py:94]
+2024-05-15 12:19:26,895 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 967 characters [in process_urls.py:94]
+2024-05-15 12:19:26,900 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 513 characters [in process_urls.py:94]
+2024-05-15 12:19:26,911 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 795 characters [in process_urls.py:94]
+2024-05-15 12:19:26,913 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 95 characters [in process_urls.py:94]
+2024-05-15 12:19:26,927 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 872 characters [in process_urls.py:94]
+2024-05-15 12:19:26,936 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 628 characters [in process_urls.py:94]
+2024-05-15 12:19:26,943 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 390 characters [in process_urls.py:94]
+2024-05-15 12:19:26,948 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 214 characters [in process_urls.py:94]
+2024-05-15 12:19:26,957 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 507 characters [in process_urls.py:94]
+2024-05-15 12:19:26,962 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 208 characters [in process_urls.py:94]
+2024-05-15 12:19:26,972 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 593 characters [in process_urls.py:94]
+2024-05-15 12:19:26,977 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 267 characters [in process_urls.py:94]
+2024-05-15 12:19:26,985 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 490 characters [in process_urls.py:94]
+2024-05-15 12:19:26,994 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 508 characters [in process_urls.py:94]
+2024-05-15 12:19:27,005 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 631 characters [in process_urls.py:94]
+2024-05-15 12:19:27,012 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 417 characters [in process_urls.py:94]
+2024-05-15 12:19:27,015 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 129 characters [in process_urls.py:94]
+2024-05-15 12:19:27,024 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 958 characters [in process_urls.py:94]
+2024-05-15 12:19:27,032 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 980 characters [in process_urls.py:94]
+2024-05-15 12:19:27,036 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 383 characters [in process_urls.py:94]
+2024-05-15 12:19:27,047 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 700 characters [in process_urls.py:94]
+2024-05-15 12:19:27,058 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 714 characters [in process_urls.py:94]
+2024-05-15 12:19:27,061 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 95 characters [in process_urls.py:94]
+2024-05-15 12:19:27,074 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 813 characters [in process_urls.py:94]
+2024-05-15 12:19:27,088 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 699 characters [in process_urls.py:94]
+2024-05-15 12:19:27,093 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 228 characters [in process_urls.py:94]
+2024-05-15 12:19:27,106 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 834 characters [in process_urls.py:94]
+2024-05-15 12:19:27,115 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 626 characters [in process_urls.py:94]
+2024-05-15 12:19:27,126 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 605 characters [in process_urls.py:94]
+2024-05-15 12:19:27,135 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 507 characters [in process_urls.py:94]
+2024-05-15 12:19:27,146 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 591 characters [in process_urls.py:94]
+2024-05-15 12:19:27,155 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 576 characters [in process_urls.py:94]
+2024-05-15 12:19:27,162 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 486 characters [in process_urls.py:94]
+2024-05-15 12:19:27,173 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 548 characters [in process_urls.py:94]
+2024-05-15 12:19:27,183 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 549 characters [in process_urls.py:94]
+2024-05-15 12:19:27,198 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 827 characters [in process_urls.py:94]
+2024-05-15 12:19:27,204 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 328 characters [in process_urls.py:94]
+2024-05-15 12:19:27,207 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 74 characters [in process_urls.py:94]
+2024-05-15 12:19:27,216 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 962 characters [in process_urls.py:94]
+2024-05-15 12:19:27,225 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 972 characters [in process_urls.py:94]
+2024-05-15 12:19:27,230 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 446 characters [in process_urls.py:94]
+2024-05-15 12:19:27,233 INFO: Processed URL 'Introduction to MoviePy - GeeksforGeeks' with content length: 64 characters [in process_urls.py:94]
+2024-05-15 12:19:27,304 DEBUG: Combined data: [<content_loaders.process_urls.Document object at 0x1ab29c110>, <content_loaders.process_urls.Document object at 0x1ab665110>, <content_loaders.process_urls.Document object at 0x1ab1ff990>, <content_loaders.process_urls.Document object at 0x1ac068290>, <content_loaders.process_urls.Document object at 0x1ab6aed10>] [in generate_embeddings.py:19]
+2024-05-15 12:19:27,366 DEBUG: Embedding generation completed [in generate_embeddings.py:25]
+2024-05-15 12:19:27,366 INFO: Generated 87 embeddings to insert into PGVector: Python Movies [in generate_embeddings.py:26]
+2024-05-15 12:19:28,546 INFO: Embeddings added to the database [in generate_embeddings.py:31]
+2024-05-15 12:19:28,547 INFO: Generated embeddings for (87, <langchain_community.vectorstores.pgvector.PGVector object at 0x1ac26c150>) items of type url [in process_data.py:96]
+2024-05-15 12:19:28,557 INFO: New project added to database with title: MoviePY [in process_data.py:108]
+2024-05-15 12:41:35,095 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-05-15 12:41:51,552 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
