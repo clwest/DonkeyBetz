@@ -83,6 +83,8 @@ class User(db.Model):
     conversation_sessions = relationship(
         "ConversationSession", back_populates="user", cascade="all, delete-orphan"
     )
+    
+    images = relationship("Image", order_by="Image.created_at", back_populates="user", cascade="all, delete-orphan")
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
@@ -153,8 +155,8 @@ class CollectionStore(db.Model):
     project_id = db.Column(Integer, ForeignKey("projects.id"))
 
     # Relationships
-    embeddings = db.relationship('EmbeddingStore', back_populates="collection", passive_deletes=True)
-    project = db.relationship('Project', back_populates='collections')
+    embeddings = relationship('EmbeddingStore', back_populates="collection", passive_deletes=True)
+    project = relationship('Project', back_populates='collections')
 
 
 class EmbeddingStore(db.Model):
@@ -167,7 +169,7 @@ class EmbeddingStore(db.Model):
     cmetadata = db.Column(JSON)
     custom_id = db.Column(String)
 
-    collection = db.relationship('CollectionStore', back_populates="embeddings")
+    collection = relationship('CollectionStore', back_populates="embeddings")
 
 
 class Project(db.Model):
@@ -181,4 +183,21 @@ class Project(db.Model):
     updated_at = db.Column(DateTime(timezone=True), server_default=func.now())
 
     users = relationship("User", secondary=user_project_table, back_populates="projects")
-    collections = db.relationship('CollectionStore', back_populates='project')
+    collections = relationship('CollectionStore', back_populates='project')
+    images = relationship("Image", order_by="Image.created_at", back_populates="project", cascade="all, delete-orphan")
+    
+class Image(db.Model):
+    __tablename__ = "images"
+    id = db.Column(String(36), primary_key=True, default=str(uuid.uuid4()))
+    user_id = db.Column(String(36), ForeignKey("users.id"), nullable=False)
+    project_id = db.Column(Integer, ForeignKey("projects.id"), nullable=True)
+    image_url = db.Column(String(255), nullable=False)  # Url or path to image
+    prompt = db.Column(Text, nullable=False) # Prompt that generated the image
+    created_at = db.Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = db.Column(DateTime(timezone=True), server_default=func.now())
+    
+    user = relationship("User", back_populates="images")
+    project = relationship("Project", back_populates="images")
+
+    def __repr__(self):
+        return f"<Image {self.name}>"

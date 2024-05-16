@@ -1,5 +1,6 @@
 import os
 import uuid
+from datetime import datetime, timedelta
 from langchain_community.chat_message_histories import PostgresChatMessageHistory
 from dotenv import load_dotenv
 
@@ -12,226 +13,114 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
+
+
 class ConversationSessionManager:
-    """
-    Manager class for handling conversation sessions.
-
-    Args:
-        connection_string (str): The connection string for the database.
-
-    Attributes:
-        connection_string (str): The connection string for the database.
-
-    Methods:
-        create_new_session: Creates a new conversation session.
-        get_session: Retrieves a conversation session by session ID.
-        get_all_sessions: Retrieves all conversation sessions for a user and chatbot.
-        update_session_status: Updates the status of a conversation session.
-        get_sessions_by_status: Retrieves conversation sessions by status.
-        pause_session: Pauses a conversation session.
-        archive_session: Archives a conversation session.
-        resume_session: Resumes a paused conversation session.
-        end_session: Ends a conversation session.
-        delete_session: Deletes a conversation session.
-        add_message: Adds a message to a conversation session.
-        get_messages: Retrieves all messages for a conversation session.
-        get_chat_history: Retrieves the chat history for a conversation session.
-    """
     def __init__(self, connection_string):
         self.connection_string = connection_string
         
     def create_new_session(self, user_id, chatbot_id, topic_name, description, session_metadata=None):
-        """
-        Creates a new conversation session.
-
-        Args:
-            user_id (str): The ID of the user.
-            chatbot_id (str): The ID of the chatbot.
-            topic_name (str): The name of the topic.
-            description (str): The description of the session.
-            session_metadata (dict, optional): Additional metadata for the session.
-
-        Returns:
-            tuple: A tuple containing the new session object and the chat history object.
-        """
         try:
             new_session = ConversationSession(
-                id = uuid.uuid4(),
-                user_id=user_id, 
-                chatbot_id=chatbot_id, 
-                topic_name=topic_name, 
+                id = str(uuid.uuid4()),
+                user_id=user_id,
+                chatbot_id=chatbot_id,
+                topic_name=topic_name,
                 description=description,
                 conversation_status="ACTIVE",
                 session_metadata=session_metadata
-                ),
-                
+            )
             hf.add_to_db(new_session)
-
+            
             chat_history = PostgresChatMessageHistory(
-                    session_id=str(new_session.id),
-                    connection_string=self.connection_string,
-                )
+                session_id=str(new_session.id),
+                connection_string=self.connection_string,
+            )
             return new_session, chat_history
         except Exception as e:
-            logger.error(f"Error creating a new session: {e}")
+            logger.error(f"Error creating a new session for user {user_id} with chatbot {chatbot_id}: {e}")
             raise ce.BadRequestError()
-    
+        
     def get_session(self, session_id):
-        """
-        Retrieves a conversation session by session ID.
-
-        Args:
-            session_id (str): The ID of the session.
-
-        Returns:
-            ConversationSession: The conversation session object.
-        """
         try:
-            session = hf.get_db_object(ConversationSession, session_id)
+            session = hf.get_db_object(ConversationSession, id=session_id)
             return session
         except Exception as e:
-            logger.error(f"Error getting session: {e}")
-            raise ce.BadRequestError()
-
+            logger.error(f"Error getting session {session_id}: {e}")
+            
     def get_all_sessions(self, user_id, chatbot_id):
-        """
-        Retrieves all conversation sessions for a user and chatbot.
-
-        Args:
-            user_id (str): The ID of the user.
-            chatbot_id (str): The ID of the chatbot.
-
-        Returns:
-            list: A list of conversation session objects.
-        """
         try:
             sessions = hf.get_db_objects(ConversationSession, user_id=user_id, chatbot_id=chatbot_id)
             return sessions
         except Exception as e:
-            logger.error(f"Error getting all sessions: {e}")
+            logger.error(f"Error getting all sessions for user {user_id} and chatbot {chatbot_id}: {e}")
             raise ce.BadRequestError()
         
-    def update_session_status(self, session_id, topic_name, description):
-        """
-        Updates the status of a conversation session.
-
-        Args:
-            session_id (str): The ID of the session.
-            topic_name (str): The name of the topic.
-            description (str): The description of the session.
-        """
+    def update_sessions_status(self, session_id, new_status):
         try:
             session = hf.get_db_object(ConversationSession, id=session_id)
             if session:
                 session.conversation_status = new_status
                 hf.update_db()
+                return session
+            else:
+                raise ce.ResourceNotFoundError(f"Session with ID {session_id} not found")
         except Exception as e:
-            logger.error(f"Error updating session: {e}")
-            raise ce.BadRequestError(f"Session with ID {session.id} not found")
-
+            logger.error(f"Error updating session {session_id} status to {new_status}": {e})
+            raise ce.BadRequestError()
     
     def get_sessions_by_status(self, user_id, chatbot_id, status):
-        """
-        Retrieves conversation sessions by status.
-
-        Args:
-            user_id (str): The ID of the user.
-            chatbot_id (str): The ID of the chatbot.
-            status (str): The status of the sessions to retrieve.
-
-        Returns:
-            list: A list of conversation session objects.
-        """
         try:
             sessions = hf.get_db_objects(ConversationSession, user_id=user_id, chatbot_id=chatbot_id, conversation_status=status)
             return sessions
         except Exception as e:
-            logger.error(f"Error getting {status} sessions: {e}")
+            logger.error(f"Error getting {status} sessions for user {user_id} and chatbot {chatbot_id}: {e}")
             raise ce.BadRequestError()
-
+        
     def pause_session(self, session_id):
-        """
-        Pauses a conversation session.
-
-        Args:
-            session_id (str): The ID of the session.
-        """
         try:
-            session = hf.get_db_object(ConversationSession, session_id)
-            session.conversation_status = "PAUSED"
-            hf.update_db()
+            session = self.update_session_status(session_id, "PAUSED")
+            return session
         except Exception as e:
-            logger.error(f"Error pausing session: {e}")
+            logger.error(f"Error pausing session {session_id}: {e}")
             raise ce.BadRequestError()
-        
+    
     def archive_session(self, session_id):
-        """
-        Archives a conversation session.
-
-        Args:
-            session_id (str): The ID of the session.
-        """
         try:
-            session = hf.get_db_object(ConversationSession, session_id)
-            session.conversation_status = "ARCHIVED"
-            hf.update_db()
+            session = self.update_sessions_status(session_id, "ARCHIVED")
+            return session
         except Exception as e:
-            logger.error(f"Error archiving session: {e}")
+            logger.error(f"Error archiving session {session_id}: {e}")
             raise ce.BadRequestError()
-
+    
     def resume_session(self, session_id):
-        """
-        Resumes a paused conversation session.
-
-        Args:
-            session_id (str): The ID of the session.
-        """
         try:
-            session = hf.get_db_object(ConversationSession, session_id)
-            session.conversation_status = "ACTIVE"
-            hf.update_db()
+            session = self.update_sessions_status(session_id, "ACTIVE")
+            return session
         except Exception as e:
-            logger.error(f"Error resuming session: {e}")
+            logger.error(f"Error resuming session {session_id}: {e}")
             raise ce.BadRequestError()
-        
+    
     def end_session(self, session_id):
-        """
-        Ends a conversation session.
-
-        Args:
-            session_id (str): The ID of the session.
-        """
         try:
-            session = hf.get_db_object(ConversationSession, session_id)
-            session.conversation_status = "ARCHIVED"
-            hf.update_db()
+            session = self.update_sessions_status(session_id, "ARCHIVED")
+            return session
         except Exception as e:
-            logger.error(f"Error ending session: {e}")
+            logger.error(f"Error ending session {session_id}: {e}")
             raise ce.BadRequestError()
-
+    
     def delete_session(self, session_id):
-        """
-        Deletes a conversation session.
-
-        Args:
-            session_id (str): The ID of the session.
-        """
         try:
-            session = hf.get_db_object(ConversationSession, session_id)
-            hf.delete_from_db(session)
+            session = hf.get_db_object(ConversationSession, id=session_id)
+            if session:
+                hf.delete_from_db(session)
+            else:
+                raise ce.ResourceNotFoundError(f"Session with ID {session_id} not found")
         except Exception as e:
-            logger.error(f"Error deleting session: {e}")
-            raise ce.BadRequestError() 
-
+            logger.error(f"Error deleting session {session_id}: {e}")
+            raise ce.BadRequestError()
+    
     def add_message(self, session_id, message_content, is_user):
-        """
-        Adds a message to a conversation session.
-
-        Args:
-            session_id (str): The ID of the session.
-            message_content (str): The content of the message.
-            is_user (bool): Indicates whether the message is from the user or AI.
-        """
         try:
             chat_history = PostgresChatMessageHistory(
                 session_id=str(session_id),
@@ -242,19 +131,10 @@ class ConversationSessionManager:
             else:
                 chat_history.add_ai_message(message_content)
         except Exception as e:
-            logger.error(f"Error adding message: {e}")
+            logger.error(f"Error adding message to session {session_id}: {e}")
             raise ce.BadRequestError()
-
+    
     def get_messages(self, session_id):
-        """
-        Retrieves all messages for a conversation session.
-
-        Args:
-            session_id (str): The ID of the session.
-
-        Returns:
-            list: A list of message objects.
-        """
         try:
             chat_history = PostgresChatMessageHistory(
                 session_id=str(session_id),
@@ -263,19 +143,10 @@ class ConversationSessionManager:
             messages = chat_history.get_messages()
             return messages
         except Exception as e:
-            logger.error(f"Error getting messages: {e}")
+            logger.error(f"Error getting messages for session {session_id}: {e}")
             raise ce.BadRequestError()
         
     def get_chat_history(self, session_id):
-        """
-        Retrieves the chat history for a conversation session.
-
-        Args:
-            session_id (str): The ID of the session.
-
-        Returns:
-            PostgresChatMessageHistory: The chat history object.
-        """
         try:
             chat_history = PostgresChatMessageHistory(
                 session_id=str(session_id),
@@ -283,5 +154,23 @@ class ConversationSessionManager:
             )
             return chat_history
         except Exception as e:
-            logger.error(f"Error getting chat history: {e}")
+            logger.error(f"Error getting chat history for session {session_id}: {e}")
+            raise ce.BadRequestError()
+        
+    def check_session_duration(self, session_id, max_duration=3600):
+        try:
+            session = self.get_session(session_id)
+            duration = (datetime.now() - session.created_at).total_seconds()
+            return duration <= max_duration
+        except Exception as e:
+            logger.error(f"Error checking session duration for session {session_id}: {e}")
+            raise ce.BadRequestError()
+        
+    def check_token_limit(self, session_id, max_tokens=3000):
+        try:
+            chat_history = self.get_chat_history(session_id)
+            token_count = sum(len(message["content"]) for message in chat_history.get_messages())
+            return token_count <= max_tokens
+        except Exception as e:
+            logger.error(f"Error checking token limit for session {session_id}: {e}")
             raise ce.BadRequestError()

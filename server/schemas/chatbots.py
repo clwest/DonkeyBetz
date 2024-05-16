@@ -12,11 +12,11 @@ class ChatbotSchema(Schema):
     collection_name = fields.String()
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
-
+    
     user = fields.Nested(UserSchema, only=("id", "username"), dump_only=True)
     session = fields.Nested("ConversationSessionSchema", only=("id", "session_metadata"), dump_only=True)
     agents = fields.Nested(AgentSchema, dump_only=True)
-    preferences = fields.Nested("ChatbotPreferenceSchema", dump_only=TabError)
+    preferences = fields.Nested("ChatbotPreferenceSchema", dump_only=True)
 
 class ChatMessageSchema(Schema):
     id = fields.Int(dump_only=True)
