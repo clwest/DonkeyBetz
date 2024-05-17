@@ -66,7 +66,7 @@ class ConversationSessionManager:
             else:
                 raise ce.ResourceNotFoundError(f"Session with ID {session_id} not found")
         except Exception as e:
-            logger.error(f"Error updating session {session_id} status to {new_status}": {e})
+            logger.error(f"Error updating session {session_id} status to {new_status}: {e}")
             raise ce.BadRequestError()
     
     def get_sessions_by_status(self, user_id, chatbot_id, status):

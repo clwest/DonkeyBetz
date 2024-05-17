@@ -1,64 +1,124 @@
-import re
-import logging
-import uuid
 import os
-from pprint import pprint
-from datetime import datetime, timedelta
-from dotenv import load_dotenv
+import re
+import uuid
+import logging
 import spacy
-
-# Flask configuration
-from flask.views import MethodView
-from flask_smorest import Blueprint
+from dotenv import load_dotenv
+from datetime import datetime, timedelta
+from pprint import pprint
 from flask import request, jsonify, make_response
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import create_refresh_token
-from flask_jwt_extended import get_jwt
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
+from flask.views import MethodView
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt, get_jwt_identity, jwt_required
+from flask_smorest import Blueprint
+from marshmallow import ValidationError
 
-# Langchain
-from langchain.schema import SystemMessage, HumanMessage, AIMessage
-
-# Helpers, Managers and other functions
-from factory.limiter_factory import limiter
 from factory import db
-from utils.content_utils import *
-from chatbots.services.chat_retrieval import ChatRetrievalService
-from models.users import User
-from models.chatbots import Chatbot, ConversationSession, ChatMessage
-import helpers.helper_functions as hf
+from models.users import User, UserQuery
+from chatbots.services.chatbot_service import ChatbotService
+from schemas.chatbots import ChatbotSchema, ConversationSessionSchema
+from chatbots.managers.chatbot_manager import ChatbotManager
+from chatbots.managers.message_manager import ChatMessageManager
+from chatbots.managers.session_manager import ConversationSessionManager
+from chatbots.utils.langchain_utility import LangchainUtility
 import helpers.custom_exceptions as ce
+import helpers.helper_functions as hf
 from services.logging_config import root_logger as logger
 
 load_dotenv()
+
+# Function to register a new Chatbot
 chatbot_blp = Blueprint("chatbot", "chatbot", url_prefix="/api/chatbot")
+chatbot_service = ChatbotService()
+chatbot_schema = ChatbotSchema()
+session_schema = ConversationSessionSchema()
 
-@chatbot_blp.route("/query", methods=["POST"])
-@jwt_required()
-def handle_query():
+@chatbot_blp.route('/chatbot', methods=['POST'])
+def create_chatbot():
+    # Deserialize and validate the incoming JSON data
     try:
-        user_id = get_jwt_identity()
-        user = User.query.get(user_id)
-        data = request.get_json()
-        query = data.get("query", "")
-        collection_name = data.get("collection_name", "default_collection")
-
-        chat_retrieval_service = ChatRetrievalService()
-        formatted_history = chat_retrieval_service.format_past_conversations(user.chat_messages)
-        response = chat_retrieval_service.query_llm(query, formatted_history, collection_name)
-
-        # Save the user query and AI response
-        session_id = str(uuid.uuid4())
-        user_query = ChatMessage(session_id=session_id, sender_id=user_id, message_type="user", content=query)
-        ai_response = ChatMessage(session_id=session_id, sender_id="AI", message_type="ai", content=response["answer"])
-        hf.add_to_db(user_query)
-        hf.add_to_db(ai_response)
-
-        return jsonify(response)
+        chatbot_data = chatbot_schema.load(request.json)
+    except ValidationError as err:
+        return jsonify(err.messages), 400
+    
+    # Use the ChatbotManager to create a new Chatbot
+    try:
+        chatbot = chatbot_service.create_chatbot(**chatbot_data)
+        # Serialize the new chatbot instance for the response
+        return chatbot_schema.dump(chatbot), 201
     except Exception as e:
-        logger.error(f"Error handling query: {e}")
+        logger.error(f"Failed to create chatbot: {e}")
+        return jsonify({"error": "Failed to create chatbot"}), 500
+
+@chatbot_blp.route("/chat", methods=["POST"])
+@jwt_required()
+def handle_chat_interaction():
+    try:
+        user_id = get_jwt_identity()["id"]
+        data = request.get_json()
+        session_id = data.get("session_id")
+        user_message = data.get("message")
+        
+        if not session_id or not user_message:
+            return jsonify({"error": "session_id and message are required"}), 400
+        
+        response = chatbot_service.handle_message(session_id, user_message)
+        return jsonify({"response": response}), 200
+    except Exception as e:
+        logger.error(f"Error in chat interaction: {e}")
+        return jsonify({"error": str(e)}), 500
+    
+@chatbot_blp.route("/session", methods=["POST"])
+@jwt_required()
+def create_sessionO():
+    try:
+        user_id = get_jwt_identity()["id"]
+        data = request.json()
+        chatbot_id = data.get("chatbot_id")
+        topic_name = data.get("topic_name")
+        description = data.get("description")
+        
+        if not chatbot_id or not topic_name or not description:
+            return jsonify({"error": "chatbot_id, topic_name, and description are required"}), 400
+        
+        new_session = chatbot_service.create_new_session(user_id, chatbot_id, topic_name, description)
+        return session_schema.dump(new_session), 201
+    except Exception as e:
+        logger.error(f"Error create session: {e}")
         return jsonify({"error": str(e)}), 500
 
+@chatbot_blp.route("/process-urls", methods=["POST"])
+def process_urls():
+    data = request.json
+    urls = data.get('urls')
+    collection_name = data.get('collection_name', 'default_collection')
+    if urls:
+        langchain_utility = LangchainUtility()
+        processed_content = langchain_utility.ingest_and_embed_content("url", urls, collection_name)
+        return jsonify({"message": "Content processed", "processed_content": processed_content}), 200
+    else:
+        return jsonify({"error": "No URLs provided"}), 400
 
+@chatbot_blp.route("/process-pdfs", methods=["POST"])
+def process_pdfs():
+    data = request.json
+    pdfs = data.get('pdfs')
+    collection_name = data.get('collection_name', 'default_collection')
+    if pdfs:
+        langchain_utility = LangchainUtility()
+        processed_content = langchain_utility.ingest_and_embed_content("pdf", pdfs, collection_name)
+        return jsonify({"message": "Content processed", "processed_content": processed_content}), 200
+    else:
+        return jsonify({"error": "No PDFs provided"}), 400
+
+@chatbot_blp.route("/process-videos", methods=["POST"])
+def process_videos():
+    data = request.json
+    videos = data.get('videos')
+    collection_name = data.get('collection_name', 'default_collection')
+    if videos:
+        langchain_utility = LangchainUtility()
+        processed_content = langchain_utility.ingest_and_embed_content("videos", videos, collection_name)
+        return jsonify({"message": "Content processed", "processed_content": processed_content}), 200
+    else:
+        return jsonify({"error": "No videos provided"}), 400
 

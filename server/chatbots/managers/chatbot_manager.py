@@ -4,6 +4,7 @@ from factory import db
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from chatbots.managers.session_manager import ConversationSessionManager
+from chatbots.utils.langchain_utility import LangchainUtility
 from models.chatbots import Chatbot as ChatbotModel
 import helpers.helper_functions as hf
 import helpers.custom_exceptions as ce
@@ -12,7 +13,7 @@ from services.logging_config import root_logger as logger
 from content_loaders.process_urls import ingest_urls
 from content_loaders.process_pdfs import ingest_pdfs
 from content_loaders.process_youtube import ingest_videos
-from chatbots.embeddings.generate_embeddings import generate_embeddings
+# from chatbots.embeddings.generate_embeddings import generate_embeddings
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -40,6 +41,7 @@ class ChatbotManager:
     def __init__(self, db_session):
         self.db_session = db_session
         self.session_manager = ConversationSessionManager(CONNECTION_STRING)
+        self.langchain_utility = LangchainUtility()
         self.model = ChatOpenAI(
             openai_api_key=OPENAI_API_KEY, model="gpt-4o", temperature=0.2
         )
@@ -152,13 +154,16 @@ class ChatbotManager:
         """
         # Define basic PromptTemplate with placeholders for messages
         return ChatPromptTemplate.from_messages([
-            ("system", "You are a helpful assistant. You may not need to use tools for every query - the user might just want to chat!")
+            (
+                "system", 
+                "You are a helpful assistant. You may not need to use tools for every query - the user might just want to chat!"
+                ),
             MessagesPlaceholder(variable_name="chat_history"),
             ("human", "{input}"),
             MessagesPlaceholder(variable_name="agent_scratchpad"),
         ])
     
-    def generate_prompt(self, input_message):
+    def generate_prompt(self, session_id, input_message):
         """
         Generates a prompt for the chatbot based on the input message.
         
@@ -169,7 +174,7 @@ class ChatbotManager:
             The generated prompt
         """
         # Use chat history and other context to fill in the template
-        chat_history = self.message_history_manager.get_chat_history()
+        chat_history = self.langchain_utility.get_chat_history(session_id)
         agent_scratchpad = self.message_history_manager.get_agent_scratchpad()
         
         # Fill template with context
@@ -179,7 +184,7 @@ class ChatbotManager:
         )
         return prompt
     
-    def handle_message(self, input_message):
+    def handle_message(self, session_id, input_message):
         """
         Handles an incoming message for the chatbot.
         
@@ -190,69 +195,16 @@ class ChatbotManager:
             The response from the chatbot.
         """
         # Log incoming message
-        logger.debug(f"Handling message for {self.model}: {input_message}")
+        logger.debug(f"Handling message for chatbot: {input_message}")
         # Generate prompt
-        prompt = self.generate_prompt(input_message)
+        prompt = self.generate_prompt(session_id, input_message)
         # Generate Response
         response = self.model(prompt)
         # Log response
         logger.debug(f"Response for {self.model}: {response}")
         
         # Manage message history
-        # Add user message to history
-        self.message_history_manager.add_user_message(input_message)
-        # Add AI message to history
-        self.message_history_manager.add_ai_message(response)
-        # Return response
+        chat_history = self.langchain_utility.get_chat_history(session_id)
+        chat_history.add_user_message(input_message)
+        chat_history.add_ai_message(response)
         return response
-    
-    def process_content(self, content, content_type, title, collection_name):
-        """
-        Processes and ingests content from URLs, PDFs, or Youtube videos to create embeddings.
-        
-        Args:
-            content: The content to process (URL, PDF, or Youtube link).
-            content_type: The type of content ('url', 'pdf', 'video').
-            title: The title of the content.
-            collection_name: The name of the collection for embeddings.
-            
-        Returns:
-            A message indicating the result of the content processing.
-        """
-        process_functions = {
-            'url': ingest_urls,
-            'pdf': ingest_pdfs,
-            'video': ingest_videos
-        }
-        
-        process_func = process_functions.get(content_type)
-        
-        if not process_func:
-            logger.error(f"Invalid content type: {content_type}")
-            return {"error": "Invalid content type"}, 400
-        try:
-            processed_content = process_func(content, title, collection_name)
-            processed_text = ' '.join([doc.page_content for doc in processed_content])
-            processed_count = generate_embeddings(processed_content, OPENAI_API_KEY, CONNECTION_STRING, collection_name)
-            logger.info(f"Generated embeddings for {processed_count} items of type {content_type}")
-            
-            existing_project = hf.get_db_object(ChatbotModel, collection_name=collection_name)
-            if not existing_project:
-                for item in processed_content:
-                    new_project = ChatbotModel(
-                        title=item.metadata.get("title", "No title"),
-                        collection_name=collection_name,
-                        source_type=content_type.upper(),
-                        content=processed_text
-                    )
-                    hf.add_to_db(new_project)
-                    logger.info(f"New project added to database with title: {new_project.title}")
-                return {"message": f"New project created with {processed_count} items processed"}, 201
-            else:
-                logger.warning(f"Project with collection name {collection_name} already exists")    
-                return {"warning": "Project already exists"}, 409
-        
-        except Exception as e:
-            logger.error(f"Error processing {content_type}: {e}")
-            return {"error": f"Failed to process {content_type} due to {str(e)}"}, 500
-        
