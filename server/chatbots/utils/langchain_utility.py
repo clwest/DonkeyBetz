@@ -9,7 +9,6 @@ from services.logging_config import root_logger as logger
 from content_loaders.process_urls import ingest_urls
 from content_loaders.process_pdfs import ingest_pdfs
 from content_loaders.process_youtube import ingest_videos
-from chatbots.embeddings.generate_embeddings import generate_embeddings
 from langchain_community.chat_message_histories import PostgresChatMessageHistory
 
 load_dotenv()
@@ -61,7 +60,8 @@ class LangchainUtility:
         processed_data = []
         
         if content_type == "url":
-            processed_data = ingest_urls(content_data)
+            urls, url_title = content_data['urls'], content_data['url_title']
+            processed_data = ingest_urls(urls, url_title, collection_name)
         elif content_type == "pdf":
             processed_data = ingest_pdfs(content_data)
         elif content_type == "videos":
@@ -71,8 +71,8 @@ class LangchainUtility:
             raise ValueError(f"Unsupported content type: {content_type}")
 
         if processed_data:
-            embeddings_count, vectorstore = generate_embeddings(
-                processed_data, self.openai_api_key, self.connection_string, collection_name
+            embeddings_count, vectorstore = self.generate_embeddings(
+                processed_data, collection_name
             )
             logger.info(f"Processed and stored {embeddings_count} embeddings.")
             return processed_data

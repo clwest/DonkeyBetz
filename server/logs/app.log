@@ -1,36 +1,105 @@
-2024-05-15 13:54:22,820 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
-2024-05-15 13:54:22,820 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
-2024-05-15 13:54:22,858 INFO: User found: bob [in users.py:101]
-2024-05-15 13:54:22,858 INFO: Attempting to validate password for user: bob [in users.py:108]
-2024-05-15 13:54:22,936 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
-2024-05-15 13:54:22,937 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
-2024-05-15 16:36:59,407 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-15 16:38:31,525 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-15 16:39:24,304 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-15 16:40:49,913 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-15 16:41:38,945 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
-2024-05-15 16:41:38,946 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
-2024-05-15 16:41:38,988 INFO: User found: bob [in users.py:101]
-2024-05-15 16:41:38,988 INFO: Attempting to validate password for user: bob [in users.py:108]
-2024-05-15 16:41:39,071 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
-2024-05-15 16:41:39,072 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
-2024-05-15 16:42:52,958 ERROR: Error handling query: Incorrect number of values in identifier to formulate primary key for session.get(); primary key columns are 'users.id' [in chatbot.py:60]
-2024-05-16 08:48:31,981 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-16 08:48:44,067 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
-2024-05-16 08:48:44,067 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
-2024-05-16 08:48:44,108 INFO: User found: bob [in users.py:101]
-2024-05-16 08:48:44,108 INFO: Attempting to validate password for user: bob [in users.py:108]
-2024-05-16 08:48:44,208 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
-2024-05-16 08:48:44,209 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
-2024-05-16 11:51:26,696 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-16 11:51:35,079 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
-2024-05-16 11:51:35,080 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
-2024-05-16 11:51:35,155 INFO: User found: bob [in users.py:101]
-2024-05-16 11:51:35,155 INFO: Attempting to validate password for user: bob [in users.py:108]
-2024-05-16 11:51:35,248 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
-2024-05-16 11:51:35,249 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
-2024-05-16 20:09:32,878 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-16 20:11:01,500 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-16 20:11:35,653 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-16 20:12:20,157 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
-2024-05-16 20:13:43,816 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-05-18 14:19:40,528 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-05-18 14:20:02,743 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
+2024-05-18 14:20:02,744 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
+2024-05-18 14:20:02,905 INFO: User found: bob [in users.py:101]
+2024-05-18 14:20:02,905 INFO: Attempting to validate password for user: bob [in users.py:108]
+2024-05-18 14:20:02,981 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
+2024-05-18 14:20:02,982 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
+2024-05-18 14:20:26,602 WARNING: Error retrieving embeddings: 'LangchainUtility' object has no attribute 'connection_string' [in chatbot.py:114]
+2024-05-22 12:23:19,572 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-05-22 12:25:16,699 ERROR: Exception on /api/users/login [POST] [in app.py:828]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/redis/connection.py", line 264, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/redis/retry.py", line 46, in call_with_retry
+    return do()
+           ^^^^
+  File "/usr/local/lib/python3.11/site-packages/redis/connection.py", line 265, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/redis/connection.py", line 627, in _connect
+    raise err
+  File "/usr/local/lib/python3.11/site-packages/redis/connection.py", line 615, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/flask/app.py", line 868, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/flask/app.py", line 1243, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/flask_limiter/extension.py", line 1168, in _check_request_limit
+    raise e
+  File "/usr/local/lib/python3.11/site-packages/flask_limiter/extension.py", line 1149, in _check_request_limit
+    self.__evaluate_limits(endpoint, all_limits)
+  File "/usr/local/lib/python3.11/site-packages/flask_limiter/extension.py", line 1086, in __evaluate_limits
+    if not method(lim.limit, *args, **kwargs):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/limits/strategies.py", line 138, in hit
+    self.storage.incr(
+  File "/usr/local/lib/python3.11/site-packages/limits/storage/redis.py", line 198, in incr
+    return int(self.lua_incr_expire([key], [expiry, amount]))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/redis/commands/core.py", line 5931, in __call__
+    return client.evalsha(self.sha, len(keys), *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/redis/commands/core.py", line 5307, in evalsha
+    return self._evalsha("EVALSHA", sha, numkeys, *keys_and_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/redis/commands/core.py", line 5291, in _evalsha
+    return self.execute_command(command, sha, numkeys, *keys_and_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/redis/connection.py", line 1086, in get_connection
+    connection.connect()
+  File "/usr/local/lib/python3.11/site-packages/redis/connection.py", line 270, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 61 connecting to localhost:6379. Connection refused.
+2024-05-22 12:26:17,404 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-05-22 12:26:27,421 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
+2024-05-22 12:26:27,422 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
+2024-05-22 12:26:27,613 INFO: User found: bob [in users.py:101]
+2024-05-22 12:26:27,613 INFO: Attempting to validate password for user: bob [in users.py:108]
+2024-05-22 12:26:27,697 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
+2024-05-22 12:26:27,698 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
+2024-05-22 17:25:19,699 INFO: PGVector extension enabled successfully. [in helper_functions.py:191]
+2024-05-22 17:25:31,761 INFO: Printing the data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:87]
+2024-05-22 17:25:31,762 INFO: Validation successful. Validated data: {'username': 'bob', 'password': 'Superuser1'} [in users.py:93]
+2024-05-22 17:25:31,887 INFO: User found: bob [in users.py:101]
+2024-05-22 17:25:31,887 INFO: Attempting to validate password for user: bob [in users.py:108]
+2024-05-22 17:25:31,975 INFO: Login successful for user: bob. Generating access token... [in users.py:116]
+2024-05-22 17:25:31,975 INFO: Printing the response: <Response 477 bytes [200 OK]> [in users.py:129]
+2024-05-22 17:25:48,643 INFO: Processed URL 'How to Use OpenCV and Python for Computer Vision and AI' with content length: 182 characters [in process_urls.py:130]
+2024-05-22 17:25:48,667 INFO: Processed URL 'How to Use OpenCV and Python for Computer Vision and AI' with content length: 943 characters [in process_urls.py:130]
+2024-05-22 17:25:48,680 INFO: Processed URL 'How to Use OpenCV and Python for Computer Vision and AI' with content length: 587 characters [in process_urls.py:130]
+2024-05-22 17:25:48,698 INFO: Processed URL 'How to Use OpenCV and Python for Computer Vision and AI' with content length: 717 characters [in process_urls.py:130]
+2024-05-22 17:25:48,711 INFO: Processed URL 'How to Use OpenCV and Python for Computer Vision and AI' with content length: 452 characters [in process_urls.py:130]
+2024-05-22 17:25:48,721 INFO: Processed URL 'How to Use OpenCV and Python for Computer Vision and AI' with content length: 412 characters [in process_urls.py:130]
+2024-05-22 17:25:48,725 INFO: Processed URL 'How to Use OpenCV and Python for Computer Vision and AI' with content length: 129 characters [in process_urls.py:130]
+2024-05-22 17:25:48,734 INFO: Processed URL 'Developer News | 404 - Page not found' with content length: 319 characters [in process_urls.py:130]
+2024-05-22 17:25:48,739 INFO: Processed URL 'Developer News | 404 - Page not found' with content length: 183 characters [in process_urls.py:130]
+2024-05-22 17:25:48,751 INFO: Processed URL 'Developer News | 404 - Page not found' with content length: 607 characters [in process_urls.py:130]
+2024-05-22 17:25:48,760 INFO: Processed URL 'Developer News | 404 - Page not found' with content length: 454 characters [in process_urls.py:130]
+2024-05-22 17:25:48,768 INFO: Processed URL 'Developer News | 404 - Page not found' with content length: 394 characters [in process_urls.py:130]
+2024-05-22 17:25:48,771 INFO: Processed URL 'Developer News | 404 - Page not found' with content length: 80 characters [in process_urls.py:130]
+2024-05-22 17:25:48,771 DEBUG: Combined data: [<content_loaders.process_urls.Document object at 0x1aca68b90>, <content_loaders.process_urls.Document object at 0x1aff70c10>, <content_loaders.process_urls.Document object at 0x1aca6ac10>, <content_loaders.process_urls.Document object at 0x1aefb7cd0>, <content_loaders.process_urls.Document object at 0x1b016c210>] [in langchain_utility.py:39]
+2024-05-22 17:25:48,822 DEBUG: Embedding generation completed [in langchain_utility.py:45]
+2024-05-22 17:25:48,822 INFO: Generated 13 embeddings to insert into PGVector: FreeCodeCamp  [in langchain_utility.py:46]
+2024-05-22 17:25:50,012 INFO: Embeddings added to the database [in langchain_utility.py:51]
+2024-05-22 17:25:50,012 INFO: Processed and stored 13 embeddings. [in langchain_utility.py:77]

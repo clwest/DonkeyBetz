@@ -1,18 +1,21 @@
 import os
 import requests
-
+import subprocess
+import json
 
 from pprint import pprint
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup as Soup
 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+
 from langchain.document_loaders.recursive_url_loader import RecursiveUrlLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-
 from retrying import retry
 import spacy
 import warnings
-
 
 from metadata.extractors import *
 from metadata.transformers import *
@@ -44,14 +47,37 @@ class Document:
     @property
     def title(self):
         return self.metadata.get("title", "No Title")
+    
+    def to_dict(self):
+        return {
+            "page_content": self.page_content,
+            "metadata": self.metadata,
+            "lemmatized_text": self.lemmatized_text,
+        }
 
+
+
+def scrape_with_selenium(url):
+    """Scrape content using Selenium"""
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+    driver.get(url)
+    content = driver.page_source
+    driver.quit()
+    return content
+    
 
 def ingest_urls(batch_urls, url_title, collection_name):
     """Process and ingest documents from URLs"""
+    
     processed_documents = []
+    
     for url in batch_urls:
         try:
-            # Load and process documents from each URL
+            # Try Langchain Loader
             loader = RecursiveUrlLoader(
                 url=url,
                 max_depth=3,
@@ -70,9 +96,19 @@ def ingest_urls(batch_urls, url_title, collection_name):
                 )
                 processed_documents.append(processed_doc)
 
-        except requests.RequestException as e:
-            pprint(f"Failed to fetch URL {url}. Error: {e}")
-            logger.error(f"Failed to fetch URL {url} after 3 attempts: {e}")
+        except Exception as e:
+            logger.warning(f"Langchain failed for URL {url}: {e}. Falling back to Selenium")    
+            
+            # Fall back to Selenium if Langchain fails
+            try:
+                page_content = scrape_with_selenium(url)
+                doc = Document(content=page_content, metadata={"title": url_title})
+                processed_doc = process_urls(
+                    doc, nlp, doc.metadata, url_title, collection_name
+                )
+                processed_documents.append(processed_doc)
+            except Exception as se:
+                logger.error(f"Both Langchain and Selenium failed for URL {url}: {se}")
 
     return processed_documents
 
